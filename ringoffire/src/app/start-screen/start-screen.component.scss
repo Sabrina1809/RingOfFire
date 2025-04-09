@@ -21,6 +21,7 @@
 
     & .start-button {
         width: 250px;
+        max-width: 80%;
         color: white;
         font-size: clamp(2rem, 3.4043vw + 1.9362rem, 4rem);
         text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -44,6 +45,7 @@
             text-shadow: 0 0 10px white;
             background-image: url(./../../assets/img/fire-1842140_640.jpg);
             background-position: bottom;
+            filter: grayscale(0.4);
         }
     }
 }
