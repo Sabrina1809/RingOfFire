@@ -1,0 +1,49 @@
+
+.start-screen {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    background-color: #404040;
+    background-image: url(./../../assets/img/pexels-pixabay-262333.jpg);
+    background-position: center;
+    background-size: cover;
+    font-family: 'Parisienne';
+
+    & h1 {
+        color: rgb(250, 218, 82);
+        font-size: clamp(4rem, 18.7234vw + -1.8511rem, 9rem);
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        text-shadow: 0 0 10px rgb(82, 61, 8);
+        margin-right: 50px;
+    }
+
+    & .start-button {
+        width: 250px;
+        color: white;
+        font-size: clamp(2rem, 3.4043vw + 1.9362rem, 4rem);
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 8px 20px 0px 20px;
+        border: 1px solid white;
+        background-image: url(./../../assets/img/background-1126926_640.jpg);
+        background-position: top;
+        position: absolute;
+        border-radius: 15px;
+        bottom: 10%;
+        left: 10%;
+        box-shadow: 0 0 5px white inset;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.25s ease-in-out;
+
+        &:hover {
+            cursor: pointer;
+            box-shadow: 0 0 5px white inset;
+            text-shadow: 0 0 10px white;
+            background-image: url(./../../assets/img/fire-1842140_640.jpg);
+            background-position: bottom;
+        }
+    }
+}
