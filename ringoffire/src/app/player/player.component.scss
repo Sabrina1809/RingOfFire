@@ -1,24 +1,25 @@
 .player {
-    background-color: rgb(223, 140, 33);
+    background-color: rgba(255, 255, 255, 0.336);
     font-family: sans-serif;
     font-size: 18px;
     display: flex;
     align-items: center;
     gap: 24px;
     width: 250px;
-    border-bottom-left-radius: 50px;
-    border-top-left-radius: 50px;
+    border-bottom-left-radius: 60px;
+    border-top-left-radius: 60px;
     & img {
-        width: 70px;
-        height: 70px;
+        width: 50px;
+        height: 50px;
         object-fit: cover;
         border-radius: 50%;
-
         &:hover {
-            box-shadow: 0 0 10px white;
-            background-color: rgba(255, 255, 255, 0.2);
             cursor: pointer;
         }
-      
     }
+}
+
+.player-active {
+    box-shadow: 0 0 3px white;
+    background-color: rgba(223, 132, 13, 0.3) !important;
 }
