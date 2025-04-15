@@ -36,6 +36,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/Modul14-RingOfFire/",
               "budgets": [
                 {
                   "type": "initial",
