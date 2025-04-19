@@ -26,7 +26,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4E3L43sW-_gwG5d9qXjqgIpSu83i7fbw",
-  authDomain: "ring-of-fire-a7e2a.firebaseapp.com",
+  // authDomain: "ring-of-fire-a7e2a.firebaseapp.com",
   projectId: "ring-of-fire-a7e2a",
   storageBucket: "ring-of-fire-a7e2a.appspot.com",
   messagingSenderId: "986575367970",
