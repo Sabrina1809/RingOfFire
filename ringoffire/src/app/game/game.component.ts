@@ -69,7 +69,7 @@ export class GameComponent implements OnInit {
   
     runInInjectionContext(this.injector, async () => {
       const gamesCollection = collection(this.firestore, 'games');
-      await addDoc(gamesCollection, { hallo: 'welt' });
+      await addDoc(gamesCollection, this.game.toJson());
       console.log('Neues Spiel erfolgreich hinzugefügt!');
     });
   }
