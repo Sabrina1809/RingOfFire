@@ -53,7 +53,7 @@ export class StartScreenComponent {
   async newGame() {
     console.log('start game');
     const game = new Game();
-    const gamesCollection = collection(this.firestore, 'games');
+    // const gamesCollection = collection(this.firestore, 'games');
 
     try {
       const gameRef = await addDoc(collection(this.firestore, 'games'), game.toJson());

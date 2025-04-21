@@ -4,8 +4,7 @@ import { GameComponent } from './game/game.component';
 
 export const routes: Routes = [
     {path: '', component: StartScreenComponent},
-    {path: 'game/:id', component: GameComponent},
-    // {path: 'games/DmxF3fGtpx3ieFBBFjRN', component: GameComponent},
+    {path: 'game/:id', component: GameComponent}
 ];
 
 // import { Routes } from '@angular/router';
