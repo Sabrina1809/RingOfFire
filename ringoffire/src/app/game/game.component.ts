@@ -37,8 +37,7 @@ export interface DialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameComponent implements OnInit {
-  pickCardAnimation = false;
-  currentCard: string = '';
+
   game!: Game;
   gameId: string = '';
 
@@ -53,33 +52,6 @@ export class GameComponent implements OnInit {
 
   }
 
-  
-  // ngOnInit(): void {
-  //   this.route.params.subscribe((params) => {
-  //     const gameId = params['id'];
-  //     this.gameId = gameId;
-  
-  //     runInInjectionContext(this.injector, () => {
-  //       docData(doc(this.firestore, `games/${gameId}`)).subscribe((game: any) => {
-  //         console.log('Live Game Update:', game);
-  
-  //         this.game = new Game();
-  
-  //         // Erst alle relevanten Daten auf this.game setzen
-  //         // Object.assign(this.game, game);
-  
-  //         // Fallbacks setzen, falls bestimmte Daten fehlen
-  //         // this.game.playedCard = Array.isArray(game.playedCard) ? game.playedCard : [];
-  //         // this.game.stack = Array.isArray(game.stack) ? game.stack : [];
-  //         // this.game.players = Array.isArray(game.players) ? game.players : [];
-  //         // this.game.currentPlayer = typeof game.currentPlayer === 'number' ? game.currentPlayer : 0;
-  
-  //         this.cdr.detectChanges();
-  //       });
-  //     });
-  //   });
-  // }
-  
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const gameId = params['id'];
@@ -101,7 +73,8 @@ export class GameComponent implements OnInit {
             this.game.stack = Array.isArray(game.stack) ? game.stack : [];
             this.game.playedCard = Array.isArray(game.playedCards) ? game.playedCards : []; // 🛑 ACHTUNG: Feldname "playedCards" (Backend) → "playedCard" (Frontend)
             this.game.currentPlayer = typeof game.currentPlayer === 'number' ? game.currentPlayer : 0;
-  
+            this.game.pickCardAnimation = game.pickCardAnimation;
+            this.game.currentCard = game.currentCard;
             this.cdr.detectChanges();
             console.log('Live Game Update:', game);
           }
@@ -118,11 +91,11 @@ export class GameComponent implements OnInit {
   }
 
   takeCard() {
-    if (!this.pickCardAnimation) {
-        this.pickCardAnimation = true;
-        this.currentCard = this.game.stack.pop() || '';
+    if (!this.game.pickCardAnimation) {
+        this.game.pickCardAnimation = true;
+        this.game.currentCard = this.game.stack.pop() || '';
         
-        console.log('currentCard:', this.currentCard);
+        console.log('currentCard:', this.game.currentCard);
         console.log('gezogene Karten: ', this.game.playedCard);
         console.log('verbleibende Karten: ', this.game.stack);
         
@@ -130,15 +103,27 @@ export class GameComponent implements OnInit {
         this.game.currentPlayer++;
         this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
 
+        updateDoc(doc(this.firestore, `games/${this.gameId}`), {
+          pickCardAnimation: true,
+          currentCard: this.game.currentCard,
+          currentPlayer: this.game.currentPlayer,
+          stack: this.game.stack,
+        });
+
         setTimeout(() => {
             // Hier wird die Karte zu playedCard hinzugefügt
             // this.game.playedCard.push(this.currentCard);
-            this.game.playedCard = [...this.game.playedCard, this.currentCard]
+            this.game.playedCard = [...this.game.playedCard, this.game.currentCard]
             
             console.log('Updated playedCards:', this.game.playedCard);
             
-            this.savePlayedCards();
-            this.pickCardAnimation = false;
+            // this.savePlayedCards();
+            updateDoc(doc(this.firestore, `games/${this.gameId}`), {
+              playedCards: this.game.playedCard,
+              pickCardAnimation: false
+            });
+      
+            this.game.pickCardAnimation = false;
         }, 1000);
     }
 }
