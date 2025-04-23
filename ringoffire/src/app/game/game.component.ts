@@ -56,8 +56,7 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const gameId = params['id'];
       this.gameId = gameId;
-  
-      let previousGameJson = ''; // Zum Vergleich zwischenspeichern
+      let previousGameJson = '';
   
       runInInjectionContext(this.injector, () => {
         docData(doc(this.firestore, `games/${gameId}`)).subscribe((game: any) => {
@@ -67,8 +66,6 @@ export class GameComponent implements OnInit {
             previousGameJson = currentGameJson;
   
             this.game = new Game();
-  
-            // Daten manuell setzen (anstatt Object.assign, damit du volle Kontrolle hast)
             this.game.players = Array.isArray(game.players) ? game.players : [];
             this.game.stack = Array.isArray(game.stack) ? game.stack : [];
             this.game.playedCard = Array.isArray(game.playedCards) ? game.playedCards : []; // 🛑 ACHTUNG: Feldname "playedCards" (Backend) → "playedCard" (Frontend)
@@ -76,30 +73,20 @@ export class GameComponent implements OnInit {
             this.game.pickCardAnimation = game.pickCardAnimation;
             this.game.currentCard = game.currentCard;
             this.cdr.detectChanges();
-            console.log('Live Game Update:', game);
           }
         });
       });
     });
   }
   
-
   newGame() {
     this.game = new Game();
-    console.log(this.game);
-  
   }
 
   takeCard() {
     if (!this.game.pickCardAnimation) {
         this.game.pickCardAnimation = true;
         this.game.currentCard = this.game.stack.pop() || '';
-        
-        console.log('currentCard:', this.game.currentCard);
-        console.log('gezogene Karten: ', this.game.playedCard);
-        console.log('verbleibende Karten: ', this.game.stack);
-        
-        // Aktualisierung des currentPlayer
         this.game.currentPlayer++;
         this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
 
@@ -111,18 +98,11 @@ export class GameComponent implements OnInit {
         });
 
         setTimeout(() => {
-            // Hier wird die Karte zu playedCard hinzugefügt
-            // this.game.playedCard.push(this.currentCard);
-            this.game.playedCard = [...this.game.playedCard, this.game.currentCard]
-            
-            console.log('Updated playedCards:', this.game.playedCard);
-            
-            // this.savePlayedCards();
+            this.game.playedCard = [...this.game.playedCard, this.game.currentCard];
             updateDoc(doc(this.firestore, `games/${this.gameId}`), {
               playedCards: this.game.playedCard,
               pickCardAnimation: false
             });
-      
             this.game.pickCardAnimation = false;
         }, 1000);
     }
@@ -135,7 +115,6 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe((name: string) => {
       if (name && name.length > 0) {
         this.game.players.push(name);
-        console.log(this.game.players);
         this.cdr.detectChanges();
         this.saveGame();
       }
@@ -144,7 +123,6 @@ export class GameComponent implements OnInit {
 
   saveGame() {
     const gameRef = doc(this.firestore, `games/${this.gameId}`);
-    
     updateDoc(gameRef, {
         players: this.game.players,
         stack: this.game.stack,
@@ -152,27 +130,27 @@ export class GameComponent implements OnInit {
         currentPlayer: this.game.currentPlayer
     })
     .then(() => {
-        console.log("Spiel erfolgreich gespeichert");
+
     })
     .catch((error) => {
         console.error("Fehler beim Speichern des Spiels:", error);
     });
-}
+  }
 
 
   savePlayedCards() {
     console.log(this.game.playedCard);
     updateDoc(doc(this.firestore, `games/${this.gameId}`), {
       playedCards: this.game.playedCard,
-      stack: this.game.stack  // Auch den Stapel speichern
+      stack: this.game.stack
     })
     .then(() => {
-        console.log("playedCards erfolgreich aktualisiert:", this.game.playedCard);
+     
     })
     .catch((error) => {
         console.error("Fehler beim Speichern von playedCards:", error);
     });
-}
+  }
 
   
 }
